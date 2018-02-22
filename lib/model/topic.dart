@@ -1,3 +1,4 @@
+import 'package:qiita_mitsuke_tatter/model/tag.dart';
 import 'package:qiita_mitsuke_tatter/model/user.dart';
 
 class Topic {
@@ -11,8 +12,8 @@ class Topic {
 
   final String title;
   final String body;
-  final String likesCount;
-  final List<String> tags;
+  final int likesCount;
+  final List<Tag> tags;
   final String updatedAt;
   final User user;
 }
