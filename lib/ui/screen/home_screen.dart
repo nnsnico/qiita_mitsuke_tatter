@@ -71,14 +71,8 @@ class _MyListItem extends State<MyListItem> {
   Widget build(BuildContext context) {
     return new Container(
       child: new ListTile(
-        leading: widget.imageUrl != null
-              ? new Image.network(widget.imageUrl)
-              : new CircleAvatar(
-                  child: new Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                    size: 32.0,
-                  ),
+        leading: new CircleAvatar(
+          backgroundImage: new NetworkImage(widget.imageUrl),
         ),
         trailing: new Row(
           children: <Widget>[
