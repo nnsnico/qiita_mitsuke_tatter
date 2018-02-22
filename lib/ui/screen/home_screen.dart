@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     QiitaApi api = new QiitaApiImpl();
     QiitaRepositoryImpl repo = new QiitaRepositoryImpl(api);
     repo.findTopic().then((topic) {
-      topics.addAll(topic);
+      setState(() => topics = topic);
     });
   }
 
