@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
+import 'package:qiita_mitsuke_tatter/api/qiita_api_impl.dart';
+import 'package:qiita_mitsuke_tatter/model/topic.dart';
+import 'package:qiita_mitsuke_tatter/repository/qiita_repository_impl.dart';
 import 'package:qiita_mitsuke_tatter/ui/screen/detail_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({
+    Key key,
+    @required this.title,
+  })
+      : super(key: key);
 
   final String title;
 
@@ -12,6 +20,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Topic> topics = [];
+
+  @override
+  void initState() {
+    super.initState();
+    QiitaApi api = new QiitaApiImpl();
+    QiitaRepositoryImpl repo = new QiitaRepositoryImpl(api);
+    repo.findTopic().then((topic) {
+      topics.addAll(topic);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -19,19 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
           title: new Text(widget.title),
         ),
         body: new ListView(
-          children: <Widget>[
-            new MyListItem(
-              title: 'ほげほげをふがふがする方法',
-              subTitle: 'Scala',
-              favCounts: 12,
-            ),
-            new MyListItem(
-              title: 'ふがふがをぴよぴよにしてみた',
-              subTitle: 'VisualStudio',
-              favCounts: 243,
-            )
-          ],
-        ));
+            children: topics.map((Topic topic) {
+          return new MyListItem(
+            title: topic.title,
+            subTitle: topic.user.id,
+            imageUrl: topic.user.imageUrl,
+            favCounts: topic.likesCount,
+          );
+        }).toList()));
   }
 }
 
@@ -40,10 +55,11 @@ class MyListItem extends StatefulWidget {
       {Key key,
       @required this.title,
       @required this.subTitle,
+      @required this.imageUrl,
       @required this.favCounts})
       : super(key: key);
 
-  final String title, subTitle;
+  final String title, subTitle, imageUrl;
   final int favCounts;
 
   @override
@@ -55,13 +71,14 @@ class _MyListItem extends State<MyListItem> {
   Widget build(BuildContext context) {
     return new Container(
       child: new ListTile(
-        leading: new CircleAvatar(
-          backgroundColor: Colors.lightGreen,
-          child: new Icon(
-            Icons.account_circle,
-            color: Colors.white,
-            size: 32.0,
-          ),
+        leading: widget.imageUrl != null
+              ? new Image.network(widget.imageUrl)
+              : new CircleAvatar(
+                  child: new Icon(
+                    Icons.account_circle,
+                    color: Colors.white,
+                    size: 32.0,
+                  ),
         ),
         trailing: new Row(
           children: <Widget>[
@@ -78,8 +95,15 @@ class _MyListItem extends State<MyListItem> {
           ],
         ),
         isThreeLine: true,
-        title: new Text(widget.title),
-        subtitle: new Text(widget.subTitle),
+        title: new Text(
+          widget.title,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        subtitle: new Text(
+          widget.subTitle,
+          maxLines: 3,
+        ),
         onTap: () => Navigator.of(context).push(
               new MaterialPageRoute(
                 builder: (BuildContext context) =>
