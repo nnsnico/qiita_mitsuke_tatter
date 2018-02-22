@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api_impl.dart';
 import 'package:qiita_mitsuke_tatter/model/topic.dart';
+import 'package:qiita_mitsuke_tatter/model/user.dart';
 import 'package:qiita_mitsuke_tatter/repository/qiita_repository_impl.dart';
 import 'package:qiita_mitsuke_tatter/ui/screen/detail_screen.dart';
 
@@ -41,26 +42,20 @@ class _MyHomePageState extends State<MyHomePage> {
         body: new ListView(
             children: topics.map((Topic topic) {
           return new MyListItem(
-            title: topic.title,
-            subTitle: topic.user.id,
-            imageUrl: topic.user.imageUrl,
-            favCounts: topic.likesCount,
+            topic: topic,
           );
         }).toList()));
   }
 }
 
 class MyListItem extends StatefulWidget {
-  MyListItem(
-      {Key key,
-      @required this.title,
-      @required this.subTitle,
-      @required this.imageUrl,
-      @required this.favCounts})
+  MyListItem({
+    Key key,
+    @required this.topic
+  })
       : super(key: key);
 
-  final String title, subTitle, imageUrl;
-  final int favCounts;
+  final Topic topic;
 
   @override
   _MyListItem createState() => new _MyListItem();
@@ -72,7 +67,9 @@ class _MyListItem extends State<MyListItem> {
     return new Container(
       child: new ListTile(
         leading: new CircleAvatar(
-          backgroundImage: new NetworkImage(widget.imageUrl),
+          backgroundImage: (widget.topic.user.imageUrl != null)
+              ? new NetworkImage(widget.topic.user.imageUrl)
+              : null,
         ),
         trailing: new Row(
           children: <Widget>[
@@ -81,7 +78,7 @@ class _MyListItem extends State<MyListItem> {
               color: Colors.pinkAccent,
             ),
             new Text(
-              widget.favCounts.toString(),
+              widget.topic.likesCount.toString(),
               style: const TextStyle(
                 color: Colors.pinkAccent,
               ),
@@ -90,18 +87,19 @@ class _MyListItem extends State<MyListItem> {
         ),
         isThreeLine: true,
         title: new Text(
-          widget.title,
+          widget.topic.title,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
         subtitle: new Text(
-          widget.subTitle,
+          widget.topic.user.id,
           maxLines: 3,
         ),
         onTap: () => Navigator.of(context).push(
               new MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    new DetailScreen(title: widget.title),
+                builder: (BuildContext context) => new DetailScreen(
+                      topic: widget.topic,
+                    ),
               ),
             ),
       ),
