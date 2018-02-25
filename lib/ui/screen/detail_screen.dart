@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qiita_mitsuke_tatter/model/topic.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart' as Browser;
 
 import 'package:qiita_mitsuke_tatter/theme.dart';
 
@@ -11,6 +13,7 @@ class DetailScreen extends StatefulWidget {
   @override
   _DetailScreen createState() => new _DetailScreen();
 }
+
 // ガバッと開いているときのAppBarのサイズ
 const double _kAppBarHeight = 200.0;
 
@@ -61,7 +64,7 @@ Widget buildAppBarTitle(
     fontSize: 18.0,
     color: Colors.white,
   ));
-  final Curve _textOpacity = const Interval(0.4, 1.0, curve: Curves.easeInOut);
+  final Curve _textOpacity = const Interval(0.2, 1.0, curve: Curves.easeInOut);
   final Size screenSize = MediaQuery.of(context).size;
   final double titleWidth =
       screenSize.width - kToolbarHeight - NavigationToolbar.kMiddleSpacing;
@@ -91,7 +94,7 @@ Widget buildAppBarTitle(
 }
 
 Widget buildHeader(Topic topic, double t) {
-  final Curve _textOpacity = const Interval(0.4, 1.0, curve: Curves.easeInOut);
+  final Curve _textOpacity = const Interval(0.7, 1.0, curve: Curves.easeInOut);
 
   return new Opacity(
     // 上にスクロールすると徐々に消えていく
@@ -124,17 +127,25 @@ Widget buildBody(Topic topic, BuildContext context) {
             constraints: new BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height -
                     MediaQuery.of(context).padding.top -
-                    kToolbarHeight),
+                    kToolbarHeight -
+                    50
+            ),
             margin: const EdgeInsets.only(top: 16.0),
-            child: new Text(
-              topic.body,
-              style: detailStyle,
+            child: new MarkdownBody(
+              data: topic.body,
+              onTapLink: (url) => launchInBrowser(url),
             ),
           ),
         ],
       ),
     ),
   );
+}
+
+launchInBrowser(String url) async {
+  if (await Browser.canLaunch(url)) {
+    await Browser.launch(url, forceSafariVC: true, forceWebView: true);
+  }
 }
 
 Widget buildTitle(String title) {
