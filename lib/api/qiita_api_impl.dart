@@ -9,8 +9,8 @@ import 'package:qiita_mitsuke_tatter/model/user.dart';
 
 class QiitaApiImpl implements QiitaApi {
 
-  var topicList = new List<Topic>();
-  var userList = new List<User>();
+  var topicList = List<Topic>();
+  var userList = List<User>();
 
   @override
   Future<List<Topic>> getTopics() async {
@@ -38,7 +38,7 @@ class QiitaApiImpl implements QiitaApi {
       var userJson = value['user'];
 
       // User
-      User user = new User(
+      User user = User(
         userJson['name'],
         userJson['id'],
         userJson['description'],
@@ -47,16 +47,16 @@ class QiitaApiImpl implements QiitaApi {
 
       // Tag
       var tags = value['tags'];
-      var tagList = new List<Tag>();
+      var tagList = List<Tag>();
       for (var tag in tags) {
-        var t = new Tag(
+        var t = Tag(
           tag['name'],
         );
         tagList.add(t);
       }
 
       // Topic
-      Topic topic = new Topic(
+      Topic topic = Topic(
           value['title'],
           value['body'],
           value['likes_count'],

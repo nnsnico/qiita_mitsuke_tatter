@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api_impl.dart';
 import 'package:qiita_mitsuke_tatter/model/topic.dart';
-import 'package:qiita_mitsuke_tatter/model/user.dart';
 import 'package:qiita_mitsuke_tatter/repository/qiita_repository_impl.dart';
 import 'package:qiita_mitsuke_tatter/ui/screen/detail_screen.dart';
 
@@ -17,7 +16,8 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _MyHomePageState createState() =>
+      _MyHomePageState(); // ignore: undefined_method
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -26,8 +26,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    QiitaApi api = new QiitaApiImpl();
-    QiitaRepositoryImpl repo = new QiitaRepositoryImpl(api);
+    QiitaApi api = QiitaApiImpl(); // ignore: undefined_method
+    QiitaRepositoryImpl repo =
+        QiitaRepositoryImpl(api); // ignore: undefined_method
     repo.findTopic().then((topic) {
       setState(() => topics = topic);
     });
@@ -35,13 +36,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
+    return Scaffold(
+        appBar: AppBar(
+          // ignore: undefined_method
+          title: Text(widget.title), // ignore: undefined_method
         ),
-        body: new ListView(
+        body: ListView(
+            // ignore: undefined_method
             children: topics.map((Topic topic) {
-          return new MyListItem(
+          return MyListItem(
+            // ignore: undefined_method
             topic: topic,
           );
         }).toList()));
@@ -49,55 +53,51 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class MyListItem extends StatefulWidget {
-  MyListItem({
-    Key key,
-    @required this.topic
-  })
-      : super(key: key);
+  MyListItem({Key key, @required this.topic}) : super(key: key);
 
   final Topic topic;
 
   @override
-  _MyListItem createState() => new _MyListItem();
+  _MyListItem createState() => _MyListItem(); // ignore: undefined_method
 }
 
 class _MyListItem extends State<MyListItem> {
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: new ListTile(
-        leading: new CircleAvatar(
+    return Container(
+      child: ListTile(
+        leading: CircleAvatar(
           backgroundImage: (widget.topic.user.imageUrl != null)
-              ? new NetworkImage(widget.topic.user.imageUrl)
+              ? NetworkImage(widget.topic.user.imageUrl)
               : null,
         ),
-        trailing: new Row(
+        trailing: Row(
           children: <Widget>[
-            new Icon(
+            Icon(
               Icons.favorite,
               color: Colors.pinkAccent,
             ),
-            new Text(
+            Text(
               widget.topic.likesCount.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.pinkAccent,
               ),
             )
           ],
         ),
         isThreeLine: true,
-        title: new Text(
+        title: Text(
           widget.topic.title,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        subtitle: new Text(
+        subtitle: Text(
           widget.topic.user.id,
           maxLines: 3,
         ),
         onTap: () => Navigator.of(context).push(
-              new MaterialPageRoute(
-                builder: (BuildContext context) => new DetailScreen(
+              MaterialPageRoute(
+                builder: (BuildContext context) => DetailScreen(
                       topic: widget.topic,
                     ),
               ),
