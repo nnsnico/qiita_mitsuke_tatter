@@ -34,35 +34,14 @@ class QiitaApiImpl implements QiitaApi {
     var json = jsonDecode(response);
 
     for (var value in json) {
-      var userJson = value['user'];
-
       // User
-      User user = User(
-        userJson['name'],
-        userJson['id'],
-        userJson['description'],
-        userJson['profile_image_url'],
-      );
+      User user = User.fromJson(value);
 
-      // Tag
-      var tags = value['tags'];
-      var tagList = List<Tag>();
-      for (var tag in tags) {
-        var t = Tag(
-          tag['name'],
-        );
-        tagList.add(t);
-      }
+      // Tags
+      List<Tag> tags = Tag.getTagListFromJson(value);
 
       // Topic
-      Topic topic = Topic(
-        value['title'],
-        value['body'],
-        value['likes_count'],
-        tagList,
-        value['updated_at'],
-        user,
-      );
+      Topic topic = Topic.fromJson(user, tags, value);
 
       topicList.add(topic);
       userList.add(user);

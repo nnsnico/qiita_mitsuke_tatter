@@ -2,12 +2,7 @@ import 'package:qiita_mitsuke_tatter/model/tag.dart';
 import 'package:qiita_mitsuke_tatter/model/user.dart';
 
 class Topic {
-  const Topic(
-      this.title,
-      this.body,
-      this.likesCount,
-      this.tags,
-      this.updatedAt,
+  const Topic(this.title, this.body, this.likesCount, this.tags, this.updatedAt,
       this.user);
 
   final String title;
@@ -16,4 +11,12 @@ class Topic {
   final List<Tag> tags;
   final String updatedAt;
   final User user;
+
+  static Topic fromJson(User user, List<Tag> tags, dynamic json) => Topic(
+      json['title'],
+      json['body'],
+      json['likes_count'],
+      tags,
+      json['updated_at'],
+      user);
 }
