@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: もしかしたらDIできるか??
     http.Client client = http.Client();
     QiitaApi api = QiitaApiImpl(httpClient: client);
-    QiitaRepository repo = QiitaRepositoryImpl(api);
+    QiitaRepository repo = QiitaRepositoryImpl(api: api);
     repo.findTopic().then((topic) {
       setState(() => topics = topic);
     });
