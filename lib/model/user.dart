@@ -14,7 +14,11 @@ class User {
   static User fromJson(dynamic json) {
     final userJson = json['user'];
 
-    return User(userJson['name'], userJson['id'], userJson['description'],
-        userJson['profile_image_url']);
+    return User(
+      userJson['name'],
+      userJson['id'],
+      userJson['description'],
+      userJson['profile_image_url'],
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
 import 'package:qiita_mitsuke_tatter/model/tag.dart';
@@ -10,6 +11,12 @@ import 'package:qiita_mitsuke_tatter/model/user.dart';
 class QiitaApiImpl implements QiitaApi {
   var topicList = List<Topic>();
   var userList = List<User>();
+  static const baseUrl = 'http://qiita.com/api/v2/items';
+  final http.Client httpClient;
+
+  QiitaApiImpl({
+    @required this.httpClient,
+  });
 
   @override
   Future<List<Topic>> getTopics() async {
@@ -30,8 +37,8 @@ class QiitaApiImpl implements QiitaApi {
   }
 
   requestAll() async {
-    var response = await http.read('http://qiita.com/api/v2/items');
-    var json = jsonDecode(response);
+    var response = await this.httpClient.get(baseUrl);
+    var json = jsonDecode(response.body);
 
     for (var value in json) {
       // User

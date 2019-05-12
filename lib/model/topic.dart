@@ -13,10 +13,11 @@ class Topic {
   final User user;
 
   static Topic fromJson(User user, List<Tag> tags, dynamic json) => Topic(
-      json['title'],
-      json['body'],
-      json['likes_count'],
-      tags,
-      json['updated_at'],
-      user);
+        json['title'],
+        json['body'],
+        json['likes_count'],
+        tags,
+        json['updated_at'],
+        user,
+      );
 }

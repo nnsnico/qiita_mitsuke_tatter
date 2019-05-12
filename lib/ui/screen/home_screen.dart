@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
 import 'package:qiita_mitsuke_tatter/api/qiita_api_impl.dart';
@@ -26,7 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     // TODO: もしかしたらDIできるか??
-    QiitaApi api = QiitaApiImpl();
+    http.Client client = http.Client();
+    QiitaApi api = QiitaApiImpl(httpClient: client);
     QiitaRepository repo = QiitaRepositoryImpl(api);
     repo.findTopic().then((topic) {
       setState(() => topics = topic);
