@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qiita_mitsuke_tatter/model/topic.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart' as Browser;
-
+import 'package:qiita_mitsuke_tatter/model/topic.dart';
 import 'package:qiita_mitsuke_tatter/theme.dart';
+import 'package:url_launcher/url_launcher.dart' as Browser;
 
 class DetailScreen extends StatefulWidget {
   DetailScreen({Key key, this.topic}) : super(key: key);
@@ -128,8 +127,7 @@ Widget buildBody(Topic topic, BuildContext context) {
                 minHeight: MediaQuery.of(context).size.height -
                     MediaQuery.of(context).padding.top -
                     kToolbarHeight -
-                    50
-            ),
+                    50),
             margin: EdgeInsets.only(top: 16.0),
             child: MarkdownBody(
               data: topic.body,
