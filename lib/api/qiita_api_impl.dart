@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
 import 'package:qiita_mitsuke_tatter/api/qiita_api.dart';
 import 'package:qiita_mitsuke_tatter/model/tag.dart';
 import 'package:qiita_mitsuke_tatter/model/topic.dart';
 import 'package:qiita_mitsuke_tatter/model/user.dart';
 
 class QiitaApiImpl implements QiitaApi {
-
   var topicList = List<Topic>();
   var userList = List<User>();
 
@@ -32,7 +31,7 @@ class QiitaApiImpl implements QiitaApi {
 
   requestAll() async {
     var response = await http.read('http://qiita.com/api/v2/items');
-    var json = JSON.decode(response);
+    var json = jsonDecode(response);
 
     for (var value in json) {
       var userJson = value['user'];
@@ -57,12 +56,12 @@ class QiitaApiImpl implements QiitaApi {
 
       // Topic
       Topic topic = Topic(
-          value['title'],
-          value['body'],
-          value['likes_count'],
-          tagList,
-          value['updated_at'],
-          user,
+        value['title'],
+        value['body'],
+        value['likes_count'],
+        tagList,
+        value['updated_at'],
+        user,
       );
 
       topicList.add(topic);
